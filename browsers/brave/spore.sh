@@ -29,11 +29,11 @@ case "$1" in
     if found_spore ; then
       echo " [INFO ] Brave browser already installed"
     else
-      remove_spore
       install_spore
     fi
     ;;
   "r"|"reinstall")
+    remove_spore
     install_spore
     ;;
   "rm"|"remove")
