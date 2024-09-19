@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-YTDL_URL=https://github.com/yt-dlp/yt-dlp/releases/download/2023.11.16/yt-dlp_linux
+RELEASE="2024.08.06"
+REPO="https://github.com/yt-dlp/yt-dlp"
+YTDL_URL="$REPO/releases/download/$RELEASE/yt-dlp_linux"
 YTDL_BIN=youtube-dl
 YTDL_PATH="$HOME/bin/releases/$YTDL_BIN"
 
