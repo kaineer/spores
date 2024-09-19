@@ -23,20 +23,6 @@ remove_spore() {
   rm -f "$HOME/bin/ytdl"
 }
 
-case "$1" in
-  "i"|"install")
-    if found_spore ; then
-      echo " [INFO ] Youtube download is already installed"
-    else
-      install_spore
-    fi
-    ;;
-  "r"|"reinstall")
-    remove_spore
-    install_spore
-    ;;
-  "rm"|"remove")
-    remove_spore
-    ;;
-esac
-
+BIN=$(readlink -f $0)
+DIR=$(dirname $BIN)
+source "$DIR/../../bin/main.sh" $1 "Youtube download"

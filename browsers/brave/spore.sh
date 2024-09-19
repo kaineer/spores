@@ -24,19 +24,6 @@ found_spore() {
   [[ "$(locate brave-browser)" != "" ]]
 }
 
-case "$1" in
-  "i"|"install")
-    if found_spore ; then
-      echo " [INFO ] Brave browser already installed"
-    else
-      install_spore
-    fi
-    ;;
-  "r"|"reinstall")
-    remove_spore
-    install_spore
-    ;;
-  "rm"|"remove")
-    remove_spore
-    ;;
-esac
+BIN=$(readlink -f $0)
+DIR=$(dirname $BIN)
+source "$DIR/../../bin/main.sh" $1 "Brave browser"

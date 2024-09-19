@@ -24,19 +24,6 @@ remove_spore() {
   rm -r "$HOME/bin/appimages/zen-$ZEN_FLAVOUR.AppImage"
 }
 
-case "$1" in
-  "i"|"install")
-    if found_spore ; then
-      echo " [INFO ] Zen browser already installed"
-    else
-      install_spore
-    fi
-    ;;
-  "r"|"reinstall")
-    remove_spore
-    install_spore
-    ;;
-  "rm"|"remove")
-    remove_spore
-    ;;
-esac
+BIN=$(readlink -f $0)
+DIR=$(dirname $BIN)
+source "$DIR/../../bin/main.sh" $1 "Zen browser"
