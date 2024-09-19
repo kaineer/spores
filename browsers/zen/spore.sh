@@ -36,7 +36,7 @@ case "$1" in
   "r"|"reinstall")
     install_spore
     ;;
-  "rm")
+  "rm"|"remove")
     remove_spore
     ;;
 esac
