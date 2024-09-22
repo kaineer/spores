@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+## TODO when checking for spore, use fzf
+
+list_spores() {
+  ## ls all available spores
+  ## check for spore.sh file
+  ## exclude bin/ directory
+}
+
+install_spore() {
+  ## check for available spore with $1 fragment
+  ## for this one try to $1/spore.sh install
+}
+
+uninstall_spore() {
+  ## check for available spore with $1 fragment
+  ## for this one try to $1/spore.sh remove
+}
+
+edit_spore() {
+  ## check for available spore with $1 fragment
+  ### when $1 is available, just start $EDITOR $1/spore.sh
+  ### otherwise
+  ###   * create directory for spore
+  ###   * touch README.md
+  ###   * copy template for spore.sh
+  ###   * make spore.sh executable
+  ###   * start $EDITOR $1/spore.sh
+}
+
+remove_spore() {
+  ## remove spore directory from repository
+  ## **are you sure, fzf **
+}
+
+case "$1" in
+  "ls"|"list")
+    list_spores
+    ;;
+  "i"|"install")
+    shift
+    install_spore $@
+    ;;
+  "u"|"uninstall")
+    shift
+    uninstall_spore $@
+    ;;
+  "rm"|"remove")
+    shift
+    remove_spore $@
+    ;;
+  "e"|"edit")
+    shift
+    edit_spore $@
+    ;;
+  *)
+    edit_spore $@
+    ;;
+esac
