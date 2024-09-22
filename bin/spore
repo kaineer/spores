@@ -1,21 +1,37 @@
 #!/usr/bin/env bash
+#  _____  ___
+# /__   \/ __\  Tangerine Cat, kaineer@gmail.com
+#   / /\/ /
+#  / / / /___   github: https://github.com/kaineer
+#  \/  \____/   twitter: https://twitter.com/kaineer
+#
+# What: manage packages/binaries I need to be installed
+#
+# Dependencies: fd, fzf
 
 ## TODO when checking for spore, use fzf
+BIN=$(readlink -f $0)
+DIR=$(dirname $(dirname $BIN))
 
+# fd all available spores
+# check for spore.sh file
 list_spores() {
-  ## ls all available spores
-  ## check for spore.sh file
-  ## exclude bin/ directory
+  cd $DIR
+  fd "spore.sh" | \
+    sed "s/\/spore.*//;s/\.\///;s/^/ * /"
+  cd - >/dev/null 2>&1
 }
 
 install_spore() {
   ## check for available spore with $1 fragment
   ## for this one try to $1/spore.sh install
+  echo "install_spore"
 }
 
 uninstall_spore() {
   ## check for available spore with $1 fragment
   ## for this one try to $1/spore.sh remove
+  echo "uninstall_spore"
 }
 
 edit_spore() {
@@ -27,11 +43,13 @@ edit_spore() {
   ###   * copy template for spore.sh
   ###   * make spore.sh executable
   ###   * start $EDITOR $1/spore.sh
+  echo "edit_spore"
 }
 
 remove_spore() {
   ## remove spore directory from repository
   ## **are you sure, fzf **
+  echo "remove_spore"
 }
 
 case "$1" in
