@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 main() {
   CMD="$1"
   NAME="${2:-spore}"
