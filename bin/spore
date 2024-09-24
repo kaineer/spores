@@ -13,6 +13,36 @@
 BIN=$(readlink -f $0)
 DIR=$(dirname $(dirname $BIN))
 
+LOCAL_BIN="$HOME/bin"
+LOCAL_CONFIG="$HOME/.config/profile.d"
+
+_has_config() {
+  cat "$HOME/.bashrc" | grep "tag: config-profile" | wc -l
+}
+
+_echo_load_profile() {
+  echo ""
+  echo "# tag: config-profile"
+  echo "cd \"\$HOME/.config/profile.d\""
+  echo "  _COUNT=\$(ls * 2>/dev/null | wc -l)"
+  echo "  if [[ \"\$_COUNT\"!=\"0\" ]]; then"
+  echo "    for x in \$(ls -1 * 2>/dev/null); do"
+  echo "      . \$x"
+  echo "    done"
+  echo "  fi"
+  echo "cd - >/dev/null 2>&1"
+  echo "# tag: /config-profile"
+}
+
+_bootstrap() {
+  [ ! -d "$LOCAL_BIN" ] && mkdir -p "$LOCAL_BIN"
+  [ ! -d "$LOCAL_CONFIG" ] && mkdir -p "$LOCAL_CONFIG"
+  HAS_CONFIG="$(_has_config)"
+  if [[ "$HAS_CONFIG" == "0" ]]; then
+    _echo_load_profile >> "$HOME/.bashrc"
+  fi
+}
+
 # fd all available spores
 # check for spore.sh file
 _list_spores() {
@@ -21,6 +51,7 @@ _list_spores() {
     sed "s/\/spore.*//;s/\.\///"
   cd - >/dev/null 2>&1
 }
+
 
 #
 list_spores() {
@@ -36,6 +67,11 @@ install_spore() {
 
   if [[ "$SPORE_NAME" != "" ]]; then
     $DIR/$SPORE_NAME/spore.sh install
+    if [ -f $DIR/$SPORE_NAME/profile.sh ]; then
+      SPORE_SLUG=$(echo "$SPORE_NAME" | sed "s/\//-/")
+      ln -s $DIR/$SPORE_NAME/profile.sh \
+        $LOCAL_CONFIG/$SPORE_SLUG
+    fi
   fi
 }
 
@@ -44,19 +80,27 @@ uninstall_spore() {
 
   if [[ "$SPORE_NAME" != "" ]]; then
     $DIR/$SPORE_NAME/spore.sh uninstall
+    if [ -f $DIR/$SPORE_NAME/profile.sh ]; then
+      SPORE_SLUG=$(echo "$SPORE_NAME" | sed "s/\//-/")
+      rm -f $LOCAL_CONFIG/$SPORE_SLUG
+    fi
   fi
 }
 
 edit_spore() {
-  ## check for available spore with $1 fragment
-  ### when $1 is available, just start $EDITOR $1/spore.sh
-  ### otherwise
-  ###   * create directory for spore
-  ###   * touch README.md
-  ###   * copy template for spore.sh
-  ###   * make spore.sh executable
-  ###   * start $EDITOR $1/spore.sh
-  echo "edit_spore"
+  if [[ "$1" == "" ]]; then
+    $EDITOR $BIN
+  else
+    ## check for available spore with $1 fragment
+    ### when $1 is available, just start $EDITOR $1/spore.sh
+    ### otherwise
+    ###   * create directory for spore
+    ###   * touch README.md
+    ###   * copy template for spore.sh
+    ###   * make spore.sh executable
+    ###   * start $EDITOR $1/spore.sh
+    echo "edit_spore"
+  fi
 }
 
 remove_spore() {
@@ -64,6 +108,8 @@ remove_spore() {
   ## **are you sure, fzf **
   echo "remove_spore"
 }
+
+_bootstrap
 
 case "$1" in
   "ls"|"list")
@@ -86,6 +132,6 @@ case "$1" in
     edit_spore $@
     ;;
   *)
-    edit_spore $@
+    [[ "$1" != "" ]] && edit_spore $@
     ;;
 esac
