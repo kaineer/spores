@@ -12,6 +12,8 @@ install_spore() {
 
 remove_spore() {
   sudo apt -y remove ${PKG}
+  sudo rm /usr/share/keyrings/wezterm-fury.gpg
+  sudo rm /etc/apt/sources.list.d/wezterm.list
 }
 
 found_spore() {
